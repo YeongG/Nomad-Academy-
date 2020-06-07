@@ -1,68 +1,32 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```javascript
+import { createStore} from 'redux';  // store를 생성하는 createStore를 불러옴
 
-## Available Scripts
+const add = document.getElementById('add');
+const minus = document.getElementById('minus');
+const number = document.querySelector('span');
 
-In the project directory, you can run:
+const ADD = "ADD";
+const MINUS = "MINUS"; // 문자열을 변수화 시킴
 
-### `yarn start`
+const countModifier = (state = 0,action) => { 
+    //modifier 선언 첫번째 매개변수는 state, 두번째 변수는 dispatch를 호출할때 같이옴
+    switch(action.type) {
+        case "ADD" : return ++state;
+        case "MINUS" : return --state;
+        default : return state;
+    }
+    return state;
+}
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+const countStore = createStore(countModifier); // store를 생성하고 modifier를 넣어줌
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+const onChange = () => {  // store가 변화할때마다 실행할 함수
+    number.innerText = countStore.getState(); 
+} 
+countStore.subscribe(onChange); // store가 변화될때마다 onChange함수를 실행하게 함
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+add.onclick=() => countStore.dispatch({type:ADD}); 
+minus.onclick=() => countStore.dispatch({type:MINUS}); // 버튼을 클릭시 dispatch가 발생하게함
+```
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
